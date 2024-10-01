@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
-import VentasFinalizadas from './VentasFinalizadas.astro';
+import VentasFinalizadas from './VentasFinalizadas';
 
 interface Oferta {
   id: number;
@@ -93,7 +93,7 @@ export default function Component() {
     const nuevaVenta: VentaFinalizada = {
       id: Date.now(),
       items: itemsVenta,
-      total: 34
+      total: calculateTotal()
     };
 
     setVentasFinalizadas(prev => [...prev, nuevaVenta]);

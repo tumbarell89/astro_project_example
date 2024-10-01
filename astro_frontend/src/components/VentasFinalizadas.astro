@@ -6,7 +6,7 @@ interface VentaItem {
   precio: number;
 }
 
-interface VentaFinalizada {
+interface ventas {
   id: Date;
   items: VentaItem[];
   total: number;
@@ -15,34 +15,36 @@ interface VentaFinalizada {
 
 const { ventas } = Astro.props;
 ---
-
-<div class="space-y-6">
-  {ventas.map((venta) => (
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h3 class="text-xl font-bold mb-4">Venta #{venta.id}</h3>
-      <table class="w-full mb-4">
-        <thead>
-          <tr class="border-b">
-            <th class="text-left py-2">Producto</th>
-            <th class="text-right py-2">Cantidad</th>
-            <th class="text-right py-2">Precio</th>
-            <th class="text-right py-2">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {venta.items.map((item) => (
+<ventasfinalizadas>
+  <div class="space-y-6">
+    {ventas.map((venta: ventas) => (
+      <div id= {venta.id.toISOString()} class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-xl font-bold mb-4">Venta #{venta.id}</h3>
+        <table class="w-full mb-4">
+          <thead>
             <tr class="border-b">
-              <td class="py-2">{item.producto}</td>
-              <td class="text-right py-2">{item.cantidad}</td>
-              <td class="text-right py-2">${item.precio.toFixed(2)}</td>
-              <td class="text-right py-2">${(item.cantidad * item.precio).toFixed(2)}</td>
+              <th class="text-left py-2">Producto</th>
+              <th class="text-right py-2">Cantidad</th>
+              <th class="text-right py-2">Precio</th>
+              <th class="text-right py-2">Subtotal</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div class="text-right font-bold">
-        Total: ${venta.total.toFixed(2)}
+          </thead>
+          <tbody>
+            {venta.items.map((item) => (
+              <tr class="border-b">
+                <td class="py-2">{item.producto}</td>
+                <td class="text-right py-2">{item.cantidad}</td>
+                <td class="text-right py-2">${item.precio.toFixed(2)}</td>
+                <td class="text-right py-2">${(item.cantidad * item.precio).toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div class="text-right font-bold">
+          Total: ${venta.total.toFixed(2)}
+        </div>
       </div>
-    </div>
-  ))}
-</div>
+    ))}
+  </div>  
+
+</ventasfinalizadas>
