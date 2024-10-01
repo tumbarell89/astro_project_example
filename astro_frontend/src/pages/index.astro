@@ -1,13 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import OfertasMenu from '../components/OfertasMenu.astro';
+import OfertasCard from '../components/OfertasCard';
 
 --- 
 
 <Layout title="Ofertas de mi punto de venta">
 	<main>
-		<Header/>
-		<OfertasMenu/>
+		<OfertasCard client:load />
 	</main>
 </Layout>
