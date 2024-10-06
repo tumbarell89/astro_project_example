@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GestionOfertas from '../components/GestionOfertas';
+import ResumenVentasDiarias from '../components/ResumenVentasDiarias';
+import ListaVentasFinalizadas from '../components/VentasFinalizadas';
+---
+
+<Layout title="Administración de Ventas">
+  <main class="min-h-screen bg-gray-100 p-4">
+    <h1 class="text-3xl font-bold text-center mb-6">Administración de Ventas</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="w-full">
+        <GestionOfertas client:load />
+      </div>
+      <div class="w-full">
+        <ResumenVentasDiarias client:load />
+      </div>
+      <div class="w-full">
+        <ListaVentasFinalizadas client:load />
+      </div>
+    </div>
+    <div class="mt-8 text-center">
+      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Volver a Ofertas
+      </a>
+    </div>
+  </main>
+</Layout>

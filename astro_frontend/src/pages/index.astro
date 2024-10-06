@@ -1,12 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import OfertasCard from '../components/OfertasCard';
+---
 
---- 
-
-<Layout title="Ofertas de mi punto de venta">
-	<main>
-		<OfertasCard client:load />
-	</main>
+<Layout title="Ofertas del Día">
+  <main class="min-h-screen flex flex-col items-center justify-start bg-gray-100 p-4">
+    <div class="w-full max-w-3xl">
+      <OfertasCard client:load />
+      <div class="mt-8 text-center">
+        <a href="/ventas-finalizadas" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Ver Ventas Finalizadas
+        </a>
+      </div>
+    </div>
+  </main>
 </Layout>
