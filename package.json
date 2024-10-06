@@ -1,6 +1,30 @@
 {
+  "name": "astro_frontend",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
   "dependencies": {
-    "astro-pwa": "^0.4.0",
-    "nanostores": "^0.7.4"
+    "@astrojs/check": "^0.9.3",
+    "@astrojs/react": "^3.6.2",
+    "@astrojs/tailwind": "^5.1.1",
+    "@heroicons/react": "^2.1.5",
+    "@sentry/astro": "^8.32.0",
+    "@spotlightjs/astro": "^2.1.10",
+    "@supabase/supabase-js": "^2.45.4",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0",
+    "@vite-pwa/astro": "^0.4.3",
+    "astro": "^4.15.9",
+    "astro-supabase": "^0.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2"
   }
 }
