@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabase';
+import { PencilIcon, TrashIcon, CheckIcon } from '@heroicons/react/24/solid';
 
 interface Oferta {
   id: number;
@@ -77,7 +78,7 @@ export default function GestionOfertas() {
 
   return (
     <div className="bg-white rounded-lg shadow p-4">
-      <h2 className="text-2xl font-bold mb-4">Gestión de Ofertas</h2>
+      <h2 className="text-2xl font-bold mb-4 h1responsivetext">Gestión de Ofertas</h2>
       <div className="mb-4">
         <input
           type="text"
@@ -141,8 +142,9 @@ export default function GestionOfertas() {
                     <button
                       onClick={() => actualizarOferta(oferta.id)}
                       className="bg-green-500 text-white p-1 rounded hover:bg-green-600 mr-2"
+                      title="Guardar"
                     >
-                      Guardar
+                      <CheckIcon className="h-5 w-5 inline-block" />
                     </button>
                   ) : (
                     <button
@@ -151,15 +153,17 @@ export default function GestionOfertas() {
                         setOfertaEditada(oferta);
                       }}
                       className="bg-yellow-500 text-white p-1 rounded hover:bg-yellow-600 mr-2"
+                      title="Editar"
                     >
-                      Editar
+                      <PencilIcon className="h-5 w-5 inline-block" />
                     </button>
                   )}
                   <button
                     onClick={() => eliminarOferta(oferta.id)}
                     className="bg-red-500 text-white p-1 rounded hover:bg-red-600"
+                    title="Eliminar"
                   >
-                    Eliminar
+                    <TrashIcon className="h-5 w-5 inline-block" />
                   </button>
                 </td>
               </tr>

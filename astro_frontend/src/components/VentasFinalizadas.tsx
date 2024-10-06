@@ -49,11 +49,11 @@ export default function ListaVentasFinalizadas() {
 
   return (
     <div className="bg-white rounded-lg shadow p-4">
-      <h2 className="text-2xl font-bold mb-4">Ventas Finalizadas</h2>
+      <h2 className="text-2xl font-bold mb-4 h1responsivetext">Ventas Finalizadas</h2>
       <div className="space-y-4">
         {ventas.map((venta) => (
           <div key={venta.id} className="border rounded p-4">
-            <h3 className="text-xl font-bold mb-2">Venta #{venta.id}</h3>
+            <h3 className="text-xl font-bold mb-2 h1responsivetext">Venta #{venta.id}</h3>
             <p className="text-sm text-gray-600 mb-2">Fecha: {new Date(venta.fecha).toLocaleString()}</p>
             <div className="overflow-x-auto">
               <table className="w-full mb-2">

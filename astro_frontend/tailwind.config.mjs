@@ -14,7 +14,17 @@ module.exports = {
 			600: '#16a34a',
 		  },
 		},
+		
 	  },
 	},
-	plugins: [],
+	plugins: [
+		function ({ addUtilities }) {
+		  const newUtilities = {
+			'.h1responsivetext': {
+			  fontSize: 'clamp(0.75rem, 1.5vw + 0.5rem, 2rem)',
+			},
+		  };
+		  addUtilities(newUtilities);
+		},
+	  ],
   }
