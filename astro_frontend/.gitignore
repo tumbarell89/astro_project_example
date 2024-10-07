@@ -1,4 +1,3 @@
-node_modules
 # build output
 ./astro_frontend/dist/
 
@@ -9,17 +8,10 @@ node_modules
 ./astro_frontend/node_modules/
 
 # logs
-<<<<<<< HEAD
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-=======
 ./astro_frontend/npm-debug.log*
 ./astro_frontend/yarn-debug.log*
 ./astro_frontend/yarn-error.log*
 ./astro_frontend/pnpm-debug.log*
->>>>>>> 123976af37944f4eb4809826bc3f20ad006514ce
 
 # environment variables
 ./astro_frontend/.env
