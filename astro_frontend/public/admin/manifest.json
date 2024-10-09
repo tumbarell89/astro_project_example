@@ -1,7 +1,7 @@
 {
   "name": "Ofertas del Día",
   "short_name": "Ofertas",
-  "start_url": "/",
+  "start_url": "/ventas-finalizadas",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4a90e2",

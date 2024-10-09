@@ -1,9 +1,6 @@
 const CACHE_NAME = 'admin-v1';
 const urlsToCache = [
-  '/admin/',
-  '/admin/index.html',
-  '/admin/styles/main.css',
-  '/admin/script/main.js',
+  '/ventas-finalizadas',
 ];
 
 self.addEventListener('install', (event) => {

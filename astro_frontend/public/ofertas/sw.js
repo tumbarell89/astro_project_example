@@ -1,9 +1,6 @@
 const CACHE_NAME = 'ofertas-v1';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/styles/main.css',
-  '/script/main.js',
 ];
 
 self.addEventListener('install', (event) => {
