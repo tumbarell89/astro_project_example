@@ -6,6 +6,7 @@ import ListaVentasFinalizadas from '../components/VentasFinalizadas';
 ---
 
 <Layout title="Administración de Ventas">
+  <link rel="manifest" href="/admin/manifest.json">
   <main class="min-h-screen bg-gray-100 p-4">
     <h1 class="text-3xl font-bold text-center mb-6">Administración de Ventas</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -19,10 +20,17 @@ import ListaVentasFinalizadas from '../components/VentasFinalizadas';
         <ListaVentasFinalizadas client:load />
       </div>
     </div>
-    <div class="mt-8 text-center">
-      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Volver a Ofertas
-      </a>
-    </div>
   </main>
 </Layout>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/admin/sw.js')
+      .then((registration) => {
+        console.log('Service Worker de admin registrado con éxito:', registration.scope);
+      })
+      .catch((error) => {
+        console.log('Error al registrar el Service Worker de admin:', error);
+      });
+  }
+</script>

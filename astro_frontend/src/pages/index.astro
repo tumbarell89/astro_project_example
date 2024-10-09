@@ -4,14 +4,22 @@ import OfertasCard from '../components/OfertasCard';
 ---
 
 <Layout title="Ofertas del Día">
+  <link rel="manifest" href="/ofertas/manifest.json">
   <main class="min-h-screen flex flex-col items-center justify-start bg-gray-100 p-4">
     <div class="w-full max-w-3xl">
       <OfertasCard client:load />
-      <div class="mt-8 text-center">
-        <a href="/ventas-finalizadas" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Ver Ventas Finalizadas
-        </a>
-      </div>
     </div>
   </main>
 </Layout>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/ofertas/sw.js')
+      .then((registration) => {
+        console.log('Service Worker de ofertas registrado con éxito:', registration.scope);
+      })
+      .catch((error) => {
+        console.log('Error al registrar el Service Worker de ofertas:', error);
+      });
+  }
+</script>
