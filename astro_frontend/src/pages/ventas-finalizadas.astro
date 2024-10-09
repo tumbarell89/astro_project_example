@@ -4,7 +4,19 @@ import GestionOfertas from '../components/GestionOfertas';
 import ResumenVentasDiarias from '../components/ResumenVentasDiarias';
 import ListaVentasFinalizadas from '../components/VentasFinalizadas';
 ---
-
+<head>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/admin/sw.js')
+        .then((registration) => {
+          console.log('Service Worker de admin registrado con éxito:', registration.scope);
+        })
+        .catch((error) => {
+          console.log('Error al registrar el Service Worker de admin:', error);
+        });
+    }
+  </script>
+</head>
 <Layout title="Administración de Ventas">
   <link rel="manifest" href="/admin/manifest.json">
   <main class="min-h-screen bg-gray-100 p-4">
@@ -23,14 +35,3 @@ import ListaVentasFinalizadas from '../components/VentasFinalizadas';
   </main>
 </Layout>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/admin/sw.js')
-      .then((registration) => {
-        console.log('Service Worker de admin registrado con éxito:', registration.scope);
-      })
-      .catch((error) => {
-        console.log('Error al registrar el Service Worker de admin:', error);
-      });
-  }
-</script>
