@@ -118,7 +118,7 @@ export default function OfertasCard() {
 
     const total = calculateTotal();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('ordenes')
       .insert({ items: itemsVenta, total })
       .select();
