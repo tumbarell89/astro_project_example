@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { supabase } from '../../lib/supabase';
 import GestionOfertas from '../../components/GestionOfertas';
 import ResumenVentasDiarias from '../../components/ResumenVentasDiarias';
-import UserManagement from '../../components/UserManagement';
+// import UserManagement from '../../components/UserManagement';
 
 // Verificar la autenticación del administrador
 const session = await supabase.auth.getSession();
@@ -24,7 +24,7 @@ const session = await supabase.auth.getSession();
       </div>
     </div>
     <div class="mt-12">
-      <UserManagement client:load />
+      <!-- <UserManagement client:load /> -->
     </div>
   </main>
 </Layout>
