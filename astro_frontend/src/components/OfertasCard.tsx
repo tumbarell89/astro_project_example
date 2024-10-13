@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
 import { supabase } from '../lib/supabase';
 

@@ -37,7 +37,7 @@ export default function UserAuth() {
       }
 
       // Crear una sesión
-      const { data, error: sessionError } = await supabase
+      const { error: sessionError } = await supabase
       .from('usuarios')
       .select('*')
       .eq('telefono', telefono)
