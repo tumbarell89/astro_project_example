@@ -1,26 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import OfertasCard from '../components/OfertasCard';
+import UserAuth from '../components/UserAuth';
 ---
-<head>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/ofertas/sw.js')
-        .then((registration) => {
-          console.log('Service Worker de ofertas registrado con éxito:', registration.scope);
-        })
-        .catch((error) => {
-          console.log('Error al registrar el Service Worker de ofertas:', error);
-        });
-    }
-  </script>
-</head>
-<Layout title="Ofertas del Día">
-  <link rel="manifest" href="/ofertas/manifest.json">
-  <main class="min-h-screen flex flex-col items-center justify-start bg-gray-100 p-4">
-    <div class="w-full max-w-3xl">
-      <OfertasCard client:load />
-    </div>
-  </main>
-</Layout>
 
+<Layout title="Login - Ofertas">
+  <UserAuth client:load />
+</Layout>

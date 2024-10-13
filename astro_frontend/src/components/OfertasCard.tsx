@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
-import { supabase } from '../../supabase';
+import { supabase } from '../lib/supabase';
 
 interface Oferta {
   id: number;
@@ -23,6 +23,7 @@ export default function OfertasCard() {
   const [selectedOfertas, setSelectedOfertas] = useState<Map<number, number>>(new Map());
   const [activeOferta, setActiveOferta] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     fetchOfertas();
@@ -30,7 +31,10 @@ export default function OfertasCard() {
       .channel('ofertas_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'ofertas' }, handleOfertasChange)
       .subscribe();
-
+    const userString = localStorage.getItem('user');
+      if (userString) {
+        setUser(JSON.parse(userString));
+      }
     return () => {
       subscription.unsubscribe();
     };
@@ -129,10 +133,27 @@ export default function OfertasCard() {
     }
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('user');
+    window.location.href = '/';
+  };
+
   return (
-    <div className="w-full transform -rotate-3 transition-transform hover:rotate-0 duration-300 mb-8">
+    <div className="max-w-2xl mx-auto transform -rotate-3 transition-transform hover:rotate-0 duration-300 mb-8">
       <div className="bg-yellow-100 rounded-lg shadow-xl p-6 border-4 border-yellow-300">
-        <h1 className="text-3xl font-bold text-center mb-6 text-yellow-800">Ofertas del Día</h1>
+      {user && (
+        <div><a className="text-3xl font-bold text-left mb-6 text-yellow-800">Ofertas del Día en {user.nombre_negocio}</a>
+        
+          
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white py-2 px-8 rounded hover:bg-red-600 transition-colors duration-200"
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        )}
         <ul className="space-y-4">
           {ofertas.map((oferta) => (
             <li 

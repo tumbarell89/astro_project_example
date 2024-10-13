@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../supabase';
+import { supabase } from '../lib/supabase';
 import { PencilIcon, TrashIcon, CheckIcon } from '@heroicons/react/24/solid';
 
 interface Oferta {

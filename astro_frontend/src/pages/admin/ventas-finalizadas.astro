@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ListaVentasFinalizadas from '../../components/VentasFinalizadas';
+import { supabase, getAuthenticatedUser } from '../../lib/supabase';
+
+const user = await getAuthenticatedUser();
+
+if (!user) {
+  return Astro.redirect('/registro');
+}
+
+// Obtener las ventas finalizadas del usuario
+const { data: ventas, error } = await supabase
+  .from('ordenes')
+  .select('*')
+  .eq('usuario_id', user.id);
+
+if (error) {
+  console.error('Error al obtener las ventas:', error);
+}
+---
+
+<Layout title="Ventas Finalizadas">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Ventas Finalizadas</h1>
+    <!-- <ListaVentasFinalizadas ventas={ventas || []} client:load /> -->
+  </main>
+</Layout>
