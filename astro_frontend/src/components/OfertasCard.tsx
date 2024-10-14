@@ -25,6 +25,8 @@ export default function OfertasCard() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
 
+  
+
   useEffect(() => {
     fetchOfertas();
     const subscription = supabase

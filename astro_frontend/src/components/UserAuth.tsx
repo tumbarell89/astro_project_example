@@ -44,6 +44,7 @@ export default function UserAuth() {
       .eq('contrasena', contrasena)
       .single();
 
+      supabase.auth.setSession;
       if (sessionError) {
         throw sessionError;
       }

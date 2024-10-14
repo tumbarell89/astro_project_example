@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
 interface VentaFinalizada {
@@ -12,14 +12,20 @@ interface VentaFinalizada {
   total: number;
 }
 
-export default function ListaVentasFinalizadas() {
-  const [ventas, setVentas] = useState<VentaFinalizada[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+interface Props {
+  ventas: VentaFinalizada[];
+}
+
+export default function ListaVentasFinalizadas({ ventas: initialVentas }: Props) {
+  const [ventas, setVentas] = useState<VentaFinalizada[]>(initialVentas);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchVentas();
-  }, []);
+    if (initialVentas.length === 0) {
+      fetchVentas();
+    }
+  }, [initialVentas]);
 
   async function fetchVentas() {
     setIsLoading(true);

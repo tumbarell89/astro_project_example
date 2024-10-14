@@ -1,28 +1,76 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// import ListaVentasFinalizadas from '../../components/VentasFinalizadas';
+import ListaVentasFinalizadas from '../../components/VentasFinalizadas';
 import { supabase, getAuthenticatedUser } from '../../lib/supabase';
+import GestionOfertas from '../../components/GestionOfertas';
+import ResumenVentasDiarias from '../../components/ResumenVentasDiarias';
+import UserManagement from '../../components/UserManagement';
 
 const user = await getAuthenticatedUser();
 
 if (!user) {
-  return Astro.redirect('/registro');
+  return Astro.redirect('/admin');
 }
 
-// Obtener las ventas finalizadas del usuario
-// const { data: ventas, error } = await supabase
-//   .from('ordenes')
-//   .select('*')
-//   .eq('usuario_id', user.id);
+// Verificar si el usuario es administrador
+const { data: userData, error: userError } = await supabase
+  .from('usuarios')
+  .select('es_admin')
+  .eq('id', user.id)
+  .single();
 
-// if (error) {
-//   console.error('Error al obtener las ventas:', error);
-// }
+if (userError || !userData?.es_admin) {
+  return Astro.redirect('/admin');
+}
+
+// Obtener las ventas finalizadas
+const { data: ventas, error } = await supabase
+  .from('ordenes')
+  .select('*')
+  .order('created_at', { ascending: false });
+
+if (error) {
+  console.error('Error al obtener las ventas:', error);
+}
+
+// Obtener datos para el resumen de ventas diarias
+const { data: resumenVentas, error: resumenError } = await supabase
+  .rpc('resumen_ventas_diarias');
+
+if (resumenError) {
+  console.error('Error al obtener el resumen de ventas:', resumenError);
+}
+
+// Obtener ofertas para la gestión
+const { data: ofertas, error: ofertasError } = await supabase
+  .from('ofertas')
+  .select('*');
+
+if (ofertasError) {
+  console.error('Error al obtener las ofertas:', ofertasError);
+}
 ---
 
-<Layout title="Ventas Finalizadas">
+<Layout title="Panel de Administración">
   <main class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Ventas Finalizadas</h1>
-    <!-- <ListaVentasFinalizadas ventas={ventas || []} client:load /> -->
+    <h1 class="text-3xl font-bold mb-6">Panel de Administración</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Gestión de Ofertas</h2>
+        <GestionOfertas  client:load />
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Resumen de Ventas Diarias</h2>
+        <ResumenVentasDiarias client:load />
+      </div>
+    </div>
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">Ventas Finalizadas</h2>
+      <ListaVentasFinalizadas ventas={ventas || []} client:load />
+    </div>
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">Gestión de Usuarios</h2>
+      <UserManagement client:load />
+    </div>
   </main>
 </Layout>
