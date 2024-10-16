@@ -8,20 +8,20 @@ import UserManagement from '../../components/UserManagement';
 
 const user = await getAuthenticatedUser();
 
-if (!user) {
-  return Astro.redirect('/admin');
-}
+// if (!user) {
+//   return Astro.redirect('/admin');
+// }
 
 // Verificar si el usuario es administrador
-const { data: userData, error: userError } = await supabase
-  .from('usuarios')
-  .select('es_admin')
-  .eq('id', user.id)
-  .single();
+// const { data: userData, error: userError } = await supabase
+//   .from('usuarios')
+//   .select('es_admin')
+//   .eq('id', user.id)
+//   .single();
 
-if (userError || !userData?.es_admin) {
-  return Astro.redirect('/admin');
-}
+// if (userError || !userData?.es_admin) {
+//   return Astro.redirect('/admin');
+// }
 
 // Obtener las ventas finalizadas
 const { data: ventas, error } = await supabase
@@ -53,24 +53,18 @@ if (ofertasError) {
 
 <Layout title="Panel de Administración">
   <main class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Panel de Administración</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div>
-        <h2 class="text-2xl font-bold mb-4">Gestión de Ofertas</h2>
-        <GestionOfertas  client:load />
+    <h1 class="text-3xl font-bold mb-6 text-white">Panel de Administración</h1>
+    <div class="flex flex-wrap -mx-2">
+      <div class="w-full md:w-1/3 px-2 mb-4">
+        <GestionOfertas client:load />
       </div>
-      <div>
-        <h2 class="text-2xl font-bold mb-4">Resumen de Ventas Diarias</h2>
+      <div class="w-full md:w-1/3 px-2 mb-4">
         <ResumenVentasDiarias client:load />
       </div>
+      <div class="w-full md:w-1/3 px-2 mb-4">
+        <ListaVentasFinalizadas ventas={ventas || []} client:load />  
+      </div>
     </div>
-    <div class="mt-12">
-      <h2 class="text-2xl font-bold mb-4">Ventas Finalizadas</h2>
-      <ListaVentasFinalizadas ventas={ventas || []} client:load />
-    </div>
-    <div class="mt-12">
-      <h2 class="text-2xl font-bold mb-4">Gestión de Usuarios</h2>
-      <UserManagement client:load />
-    </div>
+    
   </main>
 </Layout>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { PencilIcon, TrashIcon, CheckIcon } from '@heroicons/react/24/solid';
+import UserManagement from './UserManagement';
 
 interface Oferta {
   id: number;
@@ -113,7 +114,7 @@ export default function GestionOfertas() {
           <tbody>
             {ofertas.map((oferta) => (
               <tr key={oferta.id} className="border-b">
-                <td className="p-2">
+                <td className="p-1">
                   {editando === oferta.id ? (
                     <input
                       type="text"
@@ -168,6 +169,20 @@ export default function GestionOfertas() {
                 </td>
               </tr>
             ))}
+            
+            
+              
+        
+            
+          </tbody>
+        </table>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <UserManagement/>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
