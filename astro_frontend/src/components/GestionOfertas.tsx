@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, fetchOfertas } from '../lib/supabase';
 import { PencilIcon, TrashIcon, CheckIcon } from '@heroicons/react/24/solid';
 import UserManagement from './UserManagement';
 
@@ -24,32 +24,20 @@ export default function GestionOfertas() {
   const [ofertaEditada, setOfertaEditada] = useState<Oferta | null>(null);
 
   useEffect(() => {
-    // Obtener los datos del usuario desde el localStorage después de que el componente se monta
     const user = JSON.parse(localStorage.getItem('user')!);
     if (user) {
       setNuevaOferta((prevOferta) => ({
         ...prevOferta,
-        usuario_id: user.id, // Asignar usuario_id
-        negocio_id: user.negocio_id, // Asignar negocio_id
+        usuario_id: user.id,
+        negocio_id: user.id,
       }));
+      loadOfertas(user.id);
     }
-
-    // Cargar las ofertas existentes
-    fetchOfertas(user.negocio_id);
   }, []);
 
-  async function fetchOfertas(negocio_id: number) {
-    const { data, error } = await supabase
-      .from('ofertas')
-      .select('*')
-      .order('id')
-      .eq('negocio_id', negocio_id);
-    
-    if (error) {
-      console.error('Error fetching ofertas:', error);
-    } else {
-      setOfertas(data || []);
-    }
+  async function loadOfertas(negocio_id: number) {
+    const data = await fetchOfertas(negocio_id);
+    setOfertas(data);
   }
 
   async function agregarOferta() {

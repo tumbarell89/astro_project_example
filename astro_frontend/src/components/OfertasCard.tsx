@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/solid';
-import { supabase } from '../lib/supabase';
+import { supabase, fetchOfertas } from '../lib/supabase';
 
 export interface Oferta {
   id: number;
@@ -28,17 +28,20 @@ export default function OfertasCard() {
   const [isAdmin, setIsAdmin] = useState(false); // Cambiar a useState para manejar el estado correctamente
 
   useEffect(() => {
-    const userString = localStorage.getItem('user');
-    if (userString) {
-      const parsedUser = JSON.parse(userString);
-      setUser(parsedUser);
-      setIsAdmin(parsedUser.es_admin || false);
+    const user = JSON.parse(localStorage.getItem('user')!);
+    if (user) {
+      //const parsedUser = JSON.parse(userString);
+      setUser(user);
+      setIsAdmin(user.es_admin || false);
+
     }
   }, []);
   
   useEffect(() => {
     if (user) {
-      fetchOfertas();
+      let id = user.es_admin ? user.id : user.admin_id;
+      console.log('user: '+ user.admin_id)
+      loadOfertas(id);
     }
     
     const subscription = supabase
@@ -51,29 +54,35 @@ export default function OfertasCard() {
     };
   }, [user]);// Añadido el `user` como dependencia para asegurar que fetchOfertas se llame después de que se cargue el usuario
   
+  
   if (!user) {
     return <div>Cargando...</div>;
   }
-  async function fetchOfertas() {
-    if (!user) return;
 
-    const { data, error } = await supabase
-      .from('ofertas')
-      .select('id, producto, precio, usuario_id, usuarios(nombre_negocio)')
-      .eq('disponible', true)
-      .eq('usuarios.nombre_negocio', user.nombre_negocio); // Filtrar por el nombre de negocio del usuario logueado
-
-    if (error) {
-      console.error('Error fetching ofertas:', error);
-      setErrorMessage('Error al cargar las ofertas. Por favor, intente de nuevo.');
-    } else {
-      setOfertas(data || []);
-    }
+  async function loadOfertas(negocio_id: number) {
+    const data = await fetchOfertas(negocio_id);
+    setOfertas(data);
   }
+  // async function fetchOfertas() {
+  //   if (!user) return;
+
+  //   const { data, error } = await supabase
+  //     .from('ofertas')
+  //     .select('id, producto, precio, usuario_id, usuarios(nombre_negocio)')
+  //     .eq('disponible', true)
+  //     .eq('usuarios.nombre_negocio', user.nombre_negocio); // Filtrar por el nombre de negocio del usuario logueado
+
+  //   if (error) {
+  //     console.error('Error fetching ofertas:', error);
+  //     setErrorMessage('Error al cargar las ofertas. Por favor, intente de nuevo.');
+  //   } else {
+  //     setOfertas(data || []);
+  //   }
+  // }
 
   function handleOfertasChange(payload: any) {
     console.log('Cambio en ofertas:', payload);
-    fetchOfertas();
+    fetchOfertas(user.id);
   }
 
   const handleOfertaClick = (id: number) => {

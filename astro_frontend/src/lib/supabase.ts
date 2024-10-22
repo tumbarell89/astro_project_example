@@ -10,6 +10,7 @@ export interface User {
   telefono: string;
   nombre_negocio: string;
   es_admin: boolean;
+  admin_id: string;
 }
 
 export async function loginUser(telefono: string, contrasena: string): Promise<User | null> {
@@ -28,12 +29,13 @@ export async function loginUser(telefono: string, contrasena: string): Promise<U
     console.error('Incorrect password')
     return null
   }
-
+ 
   const user: User = {
     id: data.id,
     telefono: data.telefono,
     nombre_negocio: data.nombre_negocio,
-    es_admin: data.es_admin
+    es_admin: data.es_admin,
+    admin_id: data.admin_id
   }
 
   // Store user information in localStorage
@@ -58,4 +60,20 @@ export function getCurrentUser(): User | null {
 
 export function isLoggedIn(): boolean {
   return !!getCurrentUser()
+}
+
+export async function fetchOfertas(negocio_id: number) {
+  const { data, error } = await supabase
+    .from('ofertas')
+    .select('*')
+    .order('id')
+    .eq('negocio_id', negocio_id);
+
+  if (error) {
+    console.error('id:', negocio_id);
+    console.error('Error fetching ofertas:', error);
+    return [];
+  }
+  
+  return data || [];
 }
