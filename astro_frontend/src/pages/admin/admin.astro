@@ -1,8 +1,26 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import AdminLogin from '../../components/AdminLogin';
+import Layout from "../../layouts/Layout.astro";
+import AdminLogin from "../../components/AdminLogin";
 ---
 
 <Layout title="Registro Administrador">
   <AdminLogin client:load />
 </Layout>
+
+<script>
+  import { supabase, isLoggedIn } from "../../lib/supabase";
+  try {
+    const user = JSON.parse(localStorage.getItem("user")!);
+      console.log(JSON.parse(user!));
+      console.log(user!.es_admin);
+
+    if (isLoggedIn()) {
+      if (!user.es_admin) {
+        window.location.href = "/admin/ventas-finalizadas";
+       }else{
+        window.location.href = "/admin/admin";
+       }
+      
+    }
+  } catch (error) {}
+</script>

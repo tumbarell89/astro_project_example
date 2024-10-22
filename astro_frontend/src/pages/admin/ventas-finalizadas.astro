@@ -1,33 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ListaVentasFinalizadas from '../../components/VentasFinalizadas';
-import { supabase, getAuthenticatedUser } from '../../lib/supabase';
+import { supabase} from '../../lib/supabase';
 import GestionOfertas from '../../components/GestionOfertas';
 import ResumenVentasDiarias from '../../components/ResumenVentasDiarias';
-import UserManagement from '../../components/UserManagement';
-
-const user = await getAuthenticatedUser();
-
-// if (!user) {
-//   return Astro.redirect('/admin');
-// }
-
-// Verificar si el usuario es administrador
-// const { data: userData, error: userError } = await supabase
-//   .from('usuarios')
-//   .select('es_admin')
-//   .eq('id', user.id)
-//   .single();
-
-// if (userError || !userData?.es_admin) {
-//   return Astro.redirect('/admin');
-// }
+// import UserManagement from '../../components/UserManagement';
 
 // Obtener las ventas finalizadas
 const { data: ventas, error } = await supabase
   .from('ordenes')
   .select('*')
-  .order('created_at', { ascending: false });
+  .order('fecha', { ascending: false });
 
 if (error) {
   console.error('Error al obtener las ventas:', error);
@@ -53,6 +36,11 @@ if (ofertasError) {
 
 <Layout title="Panel de Administración">
   <main class="container mx-auto px-4 py-8">
+    <div class="mt-8 text-center">
+      <a href="/ofertas/ofertas" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Volver a Ofertas
+      </a>
+    </div>
     <h1 class="text-3xl font-bold mb-6 text-white">Panel de Administración</h1>
     <div class="flex flex-wrap -mx-2">
       <div class="w-full md:w-1/3 px-2 mb-4">
@@ -68,3 +56,32 @@ if (ofertasError) {
     
   </main>
 </Layout>
+
+<script>
+  import { isLoggedIn } from "../../lib/supabase";
+
+  try {
+    // Verificar si el usuario está logueado
+    if (!isLoggedIn()) {
+      window.location.href = "/admin/admin";
+    } else {
+      // Obtener el usuario almacenado en localStorage
+      const user = localStorage.getItem("user");
+
+      // Validar si el usuario existe y si tiene la propiedad "es_admin"
+      if (user) {
+        const parsedUser = JSON.parse(user);
+
+        // Verificar si el usuario es administrador
+        if (!parsedUser.es_admin) {
+          window.location.href = '/admin/admin';
+        }
+      } else {
+        // Si no hay usuario en localStorage, redirigir a login
+        window.location.href = "/admin/admin";
+      }
+    }
+  } catch (error) {
+    console.log("Error durante la verificación de autenticación:", error);
+  }
+</script>

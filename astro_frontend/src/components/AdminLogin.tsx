@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, isLoggedIn,loginUser } from '../lib/supabase';
 
 export default function AdminLogin() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,34 +12,17 @@ export default function AdminLogin() {
     e.preventDefault();
     setError(null);
 
-    if (isLogin) {
+    if (!isLoggedIn()) {
       // Login
-      try {
-        const { data: usuario, error } = await supabase
-          .from('usuarios')
-          .select('*')
-          .eq('telefono', telefono)
-          .eq('es_admin', true)
-          .single();
-
-        if (error) throw error;
-
-        if (!usuario) {
-          setError('Usuario no encontrado o no es administrador');
-          return;
+      const user = await loginUser(telefono, contrasena);
+      if (user) {
+        if (user.es_admin) {
+          window.location.href = '/admin/ventas-finalizadas';
+        } else {
+          setError('El usuario no tiene permisos de administrador');
         }
-
-        if (usuario.contrasena !== contrasena) {
-          setError('Contraseña incorrecta');
-          return;
-        }
-
-        // Login exitoso
-        localStorage.setItem('adminUser', JSON.stringify(usuario));
-        window.location.href = '/admin/ventas-finalizadas';
-      } catch (error) {
-        console.error('Error durante el login:', error);
-        setError('Error durante el login. Por favor, intenta de nuevo.');
+      } else {
+        setError('Credenciales inválidas');
       }
     } else {
       // Registro
@@ -47,7 +30,7 @@ export default function AdminLogin() {
         const { data, error } = await supabase
           .from('usuarios')
           .insert([
-            { 
+            {
               telefono,
               contrasena,
               nombre_negocio: nombreNegocio,

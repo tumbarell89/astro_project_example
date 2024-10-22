@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, isLoggedIn,loginUser } from '../lib/supabase';
 
 export default function UserAuth() {
   const [telefono, setTelefono] = useState('');
@@ -15,50 +15,21 @@ export default function UserAuth() {
     e.preventDefault();
     setError(null);
 
-    try {
-      const { data: usuario, error } = await supabase
-        .from('usuarios')
-        .select('*')
-        .eq('telefono', telefono)
-        .single();
-
-      if (error) {
-        throw error;
+    
+      // Login
+      const user = await loginUser(telefono, contrasena);
+      if (user) {
+        if(user.es_admin){
+          window.location.href = '/admin/ventas-finalizadas';
+        }else{
+          window.location.href = '/ofertas/ofertas';
+        }
+          
+        
+      } else {
+        setError('Credenciales inválidas');
       }
-
-      if (!usuario) {
-        setError('Usuario no encontrado');
-        return;
-      }
-
-      if (usuario.contrasena !== contrasena) {
-        setError('Contraseña incorrecta');
-        return;
-      }
-
-      // Crear una sesión
-      const { error: sessionError } = await supabase
-      .from('usuarios')
-      .select('*')
-      .eq('telefono', telefono)
-      .eq('contrasena', contrasena)
-      .single();
-
-      supabase.auth.setSession;
-      if (sessionError) {
-        throw sessionError;
-      }
-
-      // Almacenar información del usuario en el almacenamiento local
-      localStorage.setItem('user', JSON.stringify(usuario));
-
-      // Redirigir al usuario
-      window.location.href = '/ofertas/ofertas';
-
-    } catch (error) {
-      console.error('Error durante el login:', error);
-      setError('Error durante el login. Por favor, intenta de nuevo.');
-    }
+    
   };
 
   if (!isClient) {

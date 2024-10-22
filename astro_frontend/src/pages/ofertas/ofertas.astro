@@ -1,17 +1,18 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import OfertasCard from '../../components/OfertasCard';
-import { supabase } from '../../lib/supabase';
-
-// const { data: { session } } = await supabase.auth.getSession();
-
-// if (!session) {
-//     console.log(session);
-//   return Astro.redirect('/');
-// }
-// console.log(session);
+import Layout from "../../layouts/Layout.astro";
+import OfertasCard from "../../components/OfertasCard";
 ---
 
 <Layout title="Ofertas">
   <OfertasCard client:load />
 </Layout>
+<script>
+  import { supabase, isLoggedIn } from "../../lib/supabase";
+  try {
+    const user = localStorage.getItem("user");
+
+    if (!isLoggedIn()) {
+      window.location.href = "/";
+    }
+  } catch (error) {}
+</script>

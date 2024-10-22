@@ -8,23 +8,42 @@ interface Oferta {
   producto: string;
   precio: number;
   disponible: boolean;
+  usuario_id: number;
+  negocio_id: number;
 }
 
 export default function GestionOfertas() {
   const [ofertas, setOfertas] = useState<Oferta[]>([]);
-  const [nuevaOferta, setNuevaOferta] = useState({ producto: '', precio: 0 });
+  const [nuevaOferta, setNuevaOferta] = useState({
+    producto: '',
+    precio: 0,
+    usuario_id: 0, // Inicialmente 0, se actualizará con los datos del localStorage
+    negocio_id: 0,
+  });
   const [editando, setEditando] = useState<number | null>(null);
   const [ofertaEditada, setOfertaEditada] = useState<Oferta | null>(null);
 
   useEffect(() => {
-    fetchOfertas();
+    // Obtener los datos del usuario desde el localStorage después de que el componente se monta
+    const user = JSON.parse(localStorage.getItem('user')!);
+    if (user) {
+      setNuevaOferta((prevOferta) => ({
+        ...prevOferta,
+        usuario_id: user.id, // Asignar usuario_id
+        negocio_id: user.negocio_id, // Asignar negocio_id
+      }));
+    }
+
+    // Cargar las ofertas existentes
+    fetchOfertas(user.negocio_id);
   }, []);
 
-  async function fetchOfertas() {
+  async function fetchOfertas(negocio_id: number) {
     const { data, error } = await supabase
       .from('ofertas')
       .select('*')
-      .order('id');
+      .order('id')
+      .eq('negocio_id', negocio_id);
     
     if (error) {
       console.error('Error fetching ofertas:', error);
@@ -43,7 +62,8 @@ export default function GestionOfertas() {
       console.error('Error adding oferta:', error);
     } else {
       setOfertas([...ofertas, data[0]]);
-      setNuevaOferta({ producto: '', precio: 0 });
+      // Reiniciar el formulario después de agregar
+      setNuevaOferta({ producto: '', precio: 0, usuario_id: nuevaOferta.usuario_id, negocio_id: nuevaOferta.negocio_id });
     }
   }
 
@@ -169,18 +189,13 @@ export default function GestionOfertas() {
                 </td>
               </tr>
             ))}
-            
-            
-              
-        
-            
           </tbody>
         </table>
         <table>
           <tbody>
             <tr>
               <td>
-                <UserManagement/>
+                <UserManagement />
               </td>
             </tr>
           </tbody>
