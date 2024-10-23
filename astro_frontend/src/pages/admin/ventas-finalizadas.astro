@@ -1,10 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ListaVentasFinalizadas from '../../components/VentasFinalizadas';
-import { supabase} from '../../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import GestionOfertas from '../../components/GestionOfertas';
 import ResumenVentasDiarias from '../../components/ResumenVentasDiarias';
-// import UserManagement from '../../components/UserManagement';
 
 // Obtener las ventas finalizadas
 const { data: ventas, error } = await supabase
@@ -44,18 +43,46 @@ if (ofertasError) {
     <h1 class="text-3xl font-bold mb-6 text-white">Panel de Administración</h1>
     <div class="flex flex-wrap -mx-2">
       <div class="w-full md:w-1/3 px-2 mb-4">
-        <GestionOfertas client:load />
+        <button id="toggleOfertas" class="bg-gray-500 text-white px-4 py-2 rounded text-2xl font-bold mb-4 h1responsivetext">
+          Gestión de Ofertas
+        </button>
+        <div id="gestionOfertas" >
+          <GestionOfertas client:load />
+        </div>
       </div>
-      <div class="w-full md:w-1/3 px-2 mb-4">
+    <div  class="w-full md:w-1/3 px-2 mb-4">
+      <button id="toggleResumen" class="bg-gray-500 text-white px-4 py-2 rounded text-2xl font-bold mb-4 h1responsivetext">Resumen Ventas</button>
+      <div id="resumenVentas" >
         <ResumenVentasDiarias client:load />
       </div>
-      <div class="w-full md:w-1/3 px-2 mb-4">
-        <ListaVentasFinalizadas ventas={ventas || []} client:load />  
+    </div>
+    <div class="w-full md:w-1/3 px-2 mb-4">
+      <button id="toggleVentasFinalizadas" class="bg-gray-500 text-white px-4 py-2 rounded text-2xl font-bold mb-4 h1responsivetext">Ventas Finalizadas</button>
+      <div id="ventasFinalizadas">
+        <ListaVentasFinalizadas ventas={ventas || []} client:load />
       </div>
     </div>
-    
   </main>
 </Layout>
+
+<!-- Script para manejar la visibilidad de los componentes -->
+<script is:inline>
+  function toggleVisibility(buttonId, contentId) {
+    const button = document.getElementById(buttonId);
+    const content = document.getElementById(contentId);
+    
+    button.addEventListener("click", () => {
+      content.classList.toggle("hidden");
+      button.textContent = content.classList.contains("hidden") 
+        ? button.textContent.replace("Ocultar", "Mostrar") 
+        : button.textContent.replace("Mostrar", "Ocultar");
+    });
+  }
+
+  toggleVisibility("toggleOfertas", "gestionOfertas");
+  toggleVisibility("toggleResumen", "resumenVentas");
+  toggleVisibility("toggleVentasFinalizadas", "ventasFinalizadas");
+</script>
 
 <script>
   import { isLoggedIn } from "../../lib/supabase";

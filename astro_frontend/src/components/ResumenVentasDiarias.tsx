@@ -71,7 +71,7 @@ export default function ResumenVentasDiarias() {
   let totalGeneral = 0;
   return (
     <div className="bg-white rounded-lg shadow p-4">
-      <h2 className="text-2xl font-bold mb-4 h1responsivetext">Resumen de Ventas Diarias</h2>
+      {/* <h2 className="text-2xl font-bold mb-4 h1responsivetext">Resumen de Ventas Diarias</h2> */}
       <div className="space-y-6">
         {resumen.map((dia) => {
           let totaldeldia = dia.productos.reduce((acc, producto) => acc + producto.total, 0);

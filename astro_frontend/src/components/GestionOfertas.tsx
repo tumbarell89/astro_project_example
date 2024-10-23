@@ -87,7 +87,7 @@ export default function GestionOfertas() {
 
   return (
     <div className="bg-white rounded-lg shadow p-4">
-      <h2 className="text-2xl font-bold mb-4 h1responsivetext">Gestión de Ofertas</h2>
+      {/* <h2 className="text-2xl font-bold mb-4 h1responsivetext">Gestión de Ofertas</h2> */}
       <div className="mb-4">
         <input
           type="text"

@@ -11,7 +11,6 @@ import UserAuth from "../components/UserAuth";
   import { supabase, isLoggedIn } from "../lib/supabase";
   try {
     const user = localStorage.getItem("user");
-
     if (isLoggedIn()) {
       window.location.href = "/ofertas/ofertas";
     }

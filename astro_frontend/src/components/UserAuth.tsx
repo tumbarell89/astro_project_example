@@ -14,8 +14,6 @@ export default function UserAuth() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    
       // Login
       const user = await loginUser(telefono, contrasena);
       if (user) {
@@ -24,12 +22,9 @@ export default function UserAuth() {
         }else{
           window.location.href = '/ofertas/ofertas';
         }
-          
-        
       } else {
         setError('Credenciales inválidas');
       }
-    
   };
 
   if (!isClient) {

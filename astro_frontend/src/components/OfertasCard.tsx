@@ -17,6 +17,8 @@ export interface VentaFinalizada {
     precio: number;
   }[];
   total: number;
+  usuario_id: number;
+  negocio_id: number;
 }
 
 export default function OfertasCard() {
@@ -43,17 +45,14 @@ export default function OfertasCard() {
       console.log('user: '+ user.admin_id)
       loadOfertas(id);
     }
-    
     const subscription = supabase
       .channel('ofertas_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'ofertas' }, handleOfertasChange)
       .subscribe();
-  
     return () => {
       subscription.unsubscribe();
     };
   }, [user]);// Añadido el `user` como dependencia para asegurar que fetchOfertas se llame después de que se cargue el usuario
-  
   
   if (!user) {
     return <div>Cargando...</div>;
@@ -63,22 +62,6 @@ export default function OfertasCard() {
     const data = await fetchOfertas(negocio_id);
     setOfertas(data);
   }
-  // async function fetchOfertas() {
-  //   if (!user) return;
-
-  //   const { data, error } = await supabase
-  //     .from('ofertas')
-  //     .select('id, producto, precio, usuario_id, usuarios(nombre_negocio)')
-  //     .eq('disponible', true)
-  //     .eq('usuarios.nombre_negocio', user.nombre_negocio); // Filtrar por el nombre de negocio del usuario logueado
-
-  //   if (error) {
-  //     console.error('Error fetching ofertas:', error);
-  //     setErrorMessage('Error al cargar las ofertas. Por favor, intente de nuevo.');
-  //   } else {
-  //     setOfertas(data || []);
-  //   }
-  // }
 
   function handleOfertasChange(payload: any) {
     console.log('Cambio en ofertas:', payload);
@@ -143,10 +126,10 @@ export default function OfertasCard() {
     }
 
     const total = calculateTotal();
-
+    let id = user.es_admin ? user.id : user.admin_id;
     const { error } = await supabase
       .from('ordenes')
-      .insert({ items: itemsVenta, total })
+      .insert({ items: itemsVenta, total, usuario_id: user.id, negocio_id: id})
       .select();
 
     if (error) {
